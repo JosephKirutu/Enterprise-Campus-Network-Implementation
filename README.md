@@ -8,7 +8,7 @@ A fully redundant, hierarchical campus network designed and deployed in Cisco Pa
 ## 🗺️ Network Architecture & Audit
 
 ### Campus Topology Overview
-![Network Topology](Topology.png)
+![Network Topology](images/Topology.png)
 
 ### 📋 VLAN & Subnet Architecture Matrix
 
@@ -24,7 +24,7 @@ A fully redundant, hierarchical campus network designed and deployed in Cisco Pa
 ---
 
 ### Automated Test Audit: 1,747 / 1,753 Passed (99.66%)
-![Verification Audit](Score.png)
+![Verification Audit](images/Score.png)
 
 > **Engineering Note on Audit Metric:**  
 > The deployment passed 1,747 out of 1,753 test parameters (99.66%). The remaining 6 unscored items relate to an automated grading rule requiring a 4096-bit RSA modulus on the Catalyst 3560/3650 distribution switches. On this hardware family in Cisco IOS, key generation is strictly hardware-capped at 2048 bits (`<360-2048>`). All functional routing, switching, security, and service criteria were validated 100% operational.
@@ -109,13 +109,13 @@ Neighbor ID     Pri   State           Dead Time   Address         Interface
 
 ## 📁 Repository Contents
 
-| File | Device / Role | Key Technologies Configured |
+| File / Path | Device / Role | Key Technologies Configured |
 | :--- | :--- | :--- |
 | **`CCNA_Mega_Lab_Completed.pka`** | Master Topology | Full Packet Tracer simulation environment |
-| **`R1.cfg`** | Core Edge Router | DHCP Server Pools, NAT Overload & Static, OSPFv2, Floating Static Routes, NTP Master |
-| **`CSW1.cfg`** | Core Switch 1 | Routed Port-Channel (PAgP), OSPFv2 Transit Links, Type 9 Scrypt Authentication |
-| **`DSW1.cfg`** | Distribution Switch A1 | HSRPv2 Gateway Redundancy, Rapid-PVST+ Root, Inter-VLAN ACLs, DHCP Relay |
-| **`ASW1.cfg`** | Access Switch A1 | Dynamic ARP Inspection, DHCP Snooping, Port Security, PortFast/BPDU Guard, VTP |
+| **`configs/R1.cfg`** | Core Edge Router | DHCP Server Pools, NAT Overload & Static, OSPFv2, Floating Static Routes, NTP Master |
+| **`configs/CSW1.cfg`** | Core Switch 1 | Routed Port-Channel (PAgP), OSPFv2 Transit Links, Type 9 Scrypt Authentication |
+| **`configs/DSW1.cfg`** | Distribution Switch A1 | HSRPv2 Gateway Redundancy, Rapid-PVST+ Root, Inter-VLAN ACLs, DHCP Relay |
+| **`configs/ASW1.cfg`** | Access Switch A1 | Dynamic ARP Inspection, DHCP Snooping, Port Security, PortFast/BPDU Guard, VTP |
 
 ---
 <sub>*Architecture and scenario based on enterprise campus training materials; design, CLI configurations, and troubleshooting completed independently.*</sub>
