@@ -10,6 +10,19 @@ A fully redundant, hierarchical campus network designed and deployed in Cisco Pa
 ### Campus Topology Overview
 ![Network Topology](Topology.png)
 
+### 📋 VLAN & Subnet Architecture Matrix
+
+| VLAN ID | Subnet Name | Subnet Network | Default Gateway (HSRP VIP) | Primary Active Device |
+| :---: | :--- | :--- | :--- | :--- |
+| **10** | Office A - Data | `10.1.0.0/24` | `10.1.0.1` | DSW-A1 (`Priority 105`) |
+| **20** | Office A - Voice | `10.2.0.0/24` | `10.2.0.1` | DSW-A2 (`Priority 105`) |
+| **30** | Office B - Data | `10.3.0.0/24` | `10.3.0.1` | DSW-B1 (`Priority 105`) |
+| **40** | Wi-Fi / Voice B | `10.6.0.0/24` | `10.6.0.1` | DSW-A2 / DSW-B2 |
+| **99** | Infrastructure Mgmt | `10.0.0.0/28` | `10.0.0.1` | DSW-A1 (`Priority 105`) |
+| **1000**| Native Trunk VLAN | *Unrouted* | N/A | Inter-Switch Trunks |
+
+---
+
 ### Automated Test Audit: 1,747 / 1,753 Passed (99.66%)
 ![Verification Audit](Score.png)
 
@@ -64,16 +77,33 @@ A fully redundant, hierarchical campus network designed and deployed in Cisco Pa
 
 ---
 
-## 🔬 Engineering & Troubleshooting Case Studies
+## 🔬 Operational Verification & Case Studies
 
-1. **Cisco IOS XE Scrypt Type 9 Implementation:**  
-   Standard `enable secret` commands default to legacy Type 5 MD5 hashes. On the Catalyst 3650 distribution switches, security standards required Type 9 hashing. Configuring this required invoking the `algorithm-type scrypt` keyword during credential initialization (`enable algorithm-type scrypt secret <password>`).
+<details>
+<summary><b>Click to expand: HSRP Gateway Status (DSW-A1)</b></summary>
 
-2. **WLC Dynamic Subnet Collision:**  
-   During wireless integration, the dynamic interface for the Wi-Fi client network required alignment with the existing HSRP gateway infrastructure. Corrected an overlapping host IP assignment to place the controller interface on host `.4` (`10.6.0.4/24`), maintaining DSW-A1 SVI on `.2` and the virtual gateway on `.1`.
+```text
+DSW-A1# show standby brief
+                     P indicates configured to preempt.
+                     |
+Interface   Grp  Pri P State   Active          Standby         Virtual IP
+Vl10        2    105 P Active  local           10.1.0.3        10.1.0.1
+Vl20        3    100   Standby 10.2.0.3        local           10.2.0.1
+Vl40        4    100   Standby 10.6.0.3        local           10.6.0.1
+Vl99        1    105 P Active  local           10.0.0.3        10.0.0.1
+```
+</details>
 
-3. **Platform Asymmetric Key Generation Limits:**  
-   Documented a platform discrepancy between access and distribution layers. While the 2960 access series supports 4096-bit RSA keys, Catalyst 3560/3650 images enforce a strict upper limit of 2048 bits for general-purpose keys (`<360-2048>`), requiring exact modulus sizing matching device capabilities.
+<details>
+<summary><b>Click to expand: OSPF Transit Adjacencies (R1)</b></summary>
+
+```text
+R1# show ip ospf neighbor
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+10.0.0.77         1   FULL/  -        00:00:33    10.0.0.34       GigabitEthernet0/0
+10.0.0.78         1   FULL/  -        00:00:38    10.0.0.38       GigabitEthernet0/1
+```
+</details>
 
 ---
 
